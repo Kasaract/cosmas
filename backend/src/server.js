@@ -1,8 +1,7 @@
 const dotenv = require('dotenv');
+dotenv.config();
 
 const app = require('./app');
-
-dotenv.config();
 
 const PORT = process.env.PORT || 8080;
 
