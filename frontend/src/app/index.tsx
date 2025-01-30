@@ -64,6 +64,13 @@ const index = () => {
         >
           <ButtonText>Profile</ButtonText>
         </Button>
+        <Button
+          onPress={() => {
+            router.push("notes/notes");
+          }}
+        >
+          <ButtonText>Notes</ButtonText>
+        </Button>
       </VStack>
     </SafeAreaView>
   );

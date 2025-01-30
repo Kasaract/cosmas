@@ -329,6 +329,7 @@ const MainContent = () => {
                   key={index}
                 >
                   <Box className="w-full h-64 rounded">
+                    {/*
                     <Image
                       height={"100%"}
                       width={"100%"}
@@ -336,6 +337,7 @@ const MainContent = () => {
                       alt={item.bannerUri}
                       contentFit="cover"
                     />
+                    */}
                   </Box>
                   <VStack className="mt-4" space="md">
                     <Text className="text-sm">{item.publishedDate}</Text>
