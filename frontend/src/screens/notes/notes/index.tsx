@@ -260,9 +260,13 @@ function MobileHeader(props: MobileHeaderProps) {
   );
 }
 
-function AddNote({ isNoteModalOpen, closeNoteModal }: any) {
+function AddNote({ isNoteModalOpen, closeNoteModal, setNotes }: any) {
+  const [symptom, setSymptom] = useState("");
+  const [severity, setSeverity] = useState(-1);
+  const [details, setDetails] = useState("");
+
   return (
-    <Modal isOpen={true} onClose={closeNoteModal}>
+    <Modal isOpen={isNoteModalOpen} onClose={closeNoteModal}>
       <ModalBackdrop />
       <ModalContent>
         <ModalHeader>
@@ -275,7 +279,7 @@ function AddNote({ isNoteModalOpen, closeNoteModal }: any) {
           <VStack className="gap-3">
             <VStack className="gap-1">
               <Heading size="sm">Symptom</Heading>
-              <Select>
+              <Select value={symptom} onValueChange={setSymptom}>
                 <SelectTrigger
                   variant="outline"
                   size="md"
@@ -289,11 +293,19 @@ function AddNote({ isNoteModalOpen, closeNoteModal }: any) {
                     <SelectDragIndicatorWrapper>
                       <SelectDragIndicator />
                     </SelectDragIndicatorWrapper>
-                    <SelectItem label="Headache" value="headache" />
-                    <SelectItem label="Dizziness" value="dizziness" />
-                    <SelectItem label="Cough" value="cough" />
-                    <SelectItem label="Runny nose" value="runny nose" />
-                    <SelectItem label="Nausea" value="nausea" />
+                    {[
+                      "headache",
+                      "dizziness",
+                      "cough",
+                      "runny nose",
+                      "nausea",
+                    ].map((symp, index) => (
+                      <SelectItem
+                        label={symp.charAt(0).toUpperCase() + symp.slice(1)}
+                        value={symp}
+                        key={index}
+                      />
+                    ))}
                   </SelectContent>
                 </SelectPortal>
               </Select>
@@ -345,6 +357,7 @@ function AddNote({ isNoteModalOpen, closeNoteModal }: any) {
 
 const MainContent = () => {
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false);
+  const [notes, setNotes] = useState(NOTES);
 
   const openNoteModal = () => setIsNoteModalOpen(true);
   const closeNoteModal = () => setIsNoteModalOpen(false);
@@ -357,6 +370,7 @@ const MainContent = () => {
       <AddNote
         isNoteModalOpen={isNoteModalOpen}
         closeNoteModal={closeNoteModal}
+        setNotes={setNotes}
       />
       <Button
         size="md"
@@ -378,7 +392,7 @@ const MainContent = () => {
           showsVerticalScrollIndicator={false}
         >
           <VStack className="w-full" space="2xl">
-            {NOTES.map((note, index) => {
+            {notes.map((note, index) => {
               return (
                 <VStack key={index}>
                   <HStack className="flex justify-between">
