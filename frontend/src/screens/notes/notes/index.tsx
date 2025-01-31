@@ -260,7 +260,7 @@ function MobileHeader(props: MobileHeaderProps) {
   );
 }
 
-function AddNote({ isNoteModalOpen, closeNoteModal, setNotes }: any) {
+function AddNote({ isNoteModalOpen, closeNoteModal, notes, setNotes }: any) {
   const [symptom, setSymptom] = useState("");
   const [severity, setSeverity] = useState(-1);
   const [details, setDetails] = useState("");
@@ -316,9 +316,10 @@ function AddNote({ isNoteModalOpen, closeNoteModal, setNotes }: any) {
                 {[1, 2, 3, 4, 5].map((level, index) => (
                   <Button
                     size="sm"
-                    variant="outline"
+                    variant={severity === level ? "solid" : "outline"}
                     action="primary"
                     className="w-xs rounded-full"
+                    onPress={() => setSeverity(level)}
                     key={index}
                   >
                     <ButtonText className="text-xs">{level}</ButtonText>
@@ -329,9 +330,10 @@ function AddNote({ isNoteModalOpen, closeNoteModal, setNotes }: any) {
                 {[6, 7, 8, 9, 10].map((level, index) => (
                   <Button
                     size="sm"
-                    variant="outline"
+                    variant={severity === level ? "solid" : "outline"}
                     action="primary"
                     className="w-xs rounded-full"
+                    onPress={() => setSeverity(level)}
                     key={index}
                   >
                     <ButtonText className="text-xs">{level}</ButtonText>
@@ -342,10 +344,27 @@ function AddNote({ isNoteModalOpen, closeNoteModal, setNotes }: any) {
             <VStack>
               <Heading size="sm">Details</Heading>
               <Textarea size="md" className="">
-                <TextareaInput placeholder="Your text goes here..." />
+                <TextareaInput
+                  placeholder="Your text goes here..."
+                  value={details}
+                  onChange={(e) => setDetails(e.target.value)}
+                />
               </Textarea>
             </VStack>
-            <Button onPress={closeNoteModal}>
+            <Button
+              onPress={() => {
+                setNotes([
+                  ...notes,
+                  {
+                    timestamp: new Date().toString(),
+                    symptom: symptom,
+                    severity: severity,
+                    details: details,
+                  },
+                ]);
+                closeNoteModal();
+              }}
+            >
               <ButtonText>Add Note</ButtonText>
             </Button>
           </VStack>
@@ -370,6 +389,7 @@ const MainContent = () => {
       <AddNote
         isNoteModalOpen={isNoteModalOpen}
         closeNoteModal={closeNoteModal}
+        notes={notes}
         setNotes={setNotes}
       />
       <Button
